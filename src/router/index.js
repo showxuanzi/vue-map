@@ -15,6 +15,36 @@ export default new Router({
             meta: { title: '自述文件' },
             children:[
                 {
+                    path: '/BMap',
+                    component: resolve => require(['../components/page/BMap.vue'], resolve),
+                    meta: { title: '监控中心' }
+                },
+                {
+                    path: '/company',
+                    component: resolve => require(['../components/page/Company.vue'], resolve),
+                    meta: { title: '企业管理' }
+                },
+                // {
+                //     path: '/equipment',
+                //     component: resolve => require(['../components/page/Equipment.vue'], resolve),
+                //     meta: { title: '设备管理' }
+                // },
+                // {
+                //     path: '/parameter',
+                //     component: resolve => require(['../components/page/Parameter.vue'], resolve),
+                //     meta: { title: '参数查询' }
+                // },
+                // {
+                //     path: '/data',
+                //     component: resolve => require(['../components/page/Data.vue'], resolve),
+                //     meta: { title: '数据分析' }
+                // },
+                //  {
+                //     path: '/user',
+                //     component: resolve => require(['../components/page/User.vue'], resolve),
+                //     meta: { title: '用户管理' }
+                // },
+                {
                     path: '/dashboard',
                     component: resolve => require(['../components/page/Dashboard.vue'], resolve),
                     meta: { title: '系统首页' }

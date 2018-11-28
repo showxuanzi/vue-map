@@ -40,6 +40,36 @@
                 items: [
                     {
                         icon: 'el-icon-lx-home',
+                        index: 'BMap',
+                        title: '监控中心'
+                    },
+                    {
+                        icon: 'el-icon-lx-home',
+                        index: 'company',
+                        title: '企业管理'
+                    },
+                    // {
+                    //     icon: 'el-icon-lx-home',
+                    //     index: 'equipment',
+                    //     title: '设备管理'
+                    // },
+                    // {
+                    //     icon: 'el-icon-lx-home',
+                    //     index: 'parameter',
+                    //     title: '参数查询'
+                    // },
+                    // {
+                    //     icon: 'el-icon-lx-home',
+                    //     index: 'data',
+                    //     title: '数据分析'
+                    // },
+                    // {
+                    //     icon: 'el-icon-lx-home',
+                    //     index: 'user',
+                    //     title: '用户管理'
+                    // },
+                    {
+                        icon: 'el-icon-lx-home',
                         index: 'dashboard',
                         title: '系统首页'
                     },
@@ -123,6 +153,7 @@
         created(){
             // 通过 Event Bus 进行组件间通信，来折叠侧边栏
             bus.$on('collapse', msg => {
+                console.log(msg);
                 this.collapse = msg;
             })
         }
