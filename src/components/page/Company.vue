@@ -129,7 +129,7 @@
             getData() {
                 // 开发环境使用 easy-mock 数据，正式环境使用 json 文件
                 if (process.env.NODE_ENV === 'development') {
-                    this.url = 'https://www.easy-mock.com/mock/5bfe3a97009a932767a6367a/table/list';
+                    this.url = 'https://www.easy-mock.com/mock/5bfe3a97009a932767a6367a/table/company';
                     // this.url = '/ms/example/xmx';
                 };
                 this.$axios.post(this.url, {
@@ -196,7 +196,7 @@
             // 添加
             add(){
                 this.editVisible = true;
-                this.dialogTitle = "添加"
+                this.dialogTitle = "添加";
             }
         }
     }

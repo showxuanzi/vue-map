@@ -24,11 +24,11 @@ export default new Router({
                     component: resolve => require(['../components/page/Company.vue'], resolve),
                     meta: { title: '企业管理' }
                 },
-                // {
-                //     path: '/equipment',
-                //     component: resolve => require(['../components/page/Equipment.vue'], resolve),
-                //     meta: { title: '设备管理' }
-                // },
+                {
+                    path: '/equipment',
+                    component: resolve => require(['../components/page/Equipment.vue'], resolve),
+                    meta: { title: '设备管理' }
+                },
                 // {
                 //     path: '/parameter',
                 //     component: resolve => require(['../components/page/Parameter.vue'], resolve),

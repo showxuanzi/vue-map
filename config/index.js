@@ -11,13 +11,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // '/api':{
-      //     target:'http://jsonplaceholder.typicode.com',
-      //     changeOrigin:true,
-      //     pathRewrite:{
-      //         '/api':''
-      //     }
-      // },
+      '/api':{
+          target:'http://jsonplaceholder.typicode.com',
+          changeOrigin:true,
+          pathRewrite:{
+              '/api':''
+          }
+      },
       '/ms':{
           // target: 'https://www.easy-mock.com/mock/592501a391470c0ac1fab128',
           target: 'https://www.easy-mock.com/mock/5bfe3a97009a932767a6367a',

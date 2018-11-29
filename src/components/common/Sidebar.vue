@@ -48,11 +48,11 @@
                         index: 'company',
                         title: '企业管理'
                     },
-                    // {
-                    //     icon: 'el-icon-lx-home',
-                    //     index: 'equipment',
-                    //     title: '设备管理'
-                    // },
+                    {
+                        icon: 'el-icon-lx-home',
+                        index: 'equipment',
+                        title: '设备管理'
+                    },
                     // {
                     //     icon: 'el-icon-lx-home',
                     //     index: 'parameter',
