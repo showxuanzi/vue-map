@@ -53,21 +53,21 @@
                         index: 'equipment',
                         title: '设备管理'
                     },
-                    // {
-                    //     icon: 'el-icon-lx-home',
-                    //     index: 'parameter',
-                    //     title: '参数查询'
-                    // },
+                    {
+                        icon: 'el-icon-lx-home',
+                        index: 'parameter',
+                        title: '参数查询'
+                    },
                     // {
                     //     icon: 'el-icon-lx-home',
                     //     index: 'data',
                     //     title: '数据分析'
                     // },
-                    // {
-                    //     icon: 'el-icon-lx-home',
-                    //     index: 'user',
-                    //     title: '用户管理'
-                    // },
+                    {
+                        icon: 'el-icon-lx-home',
+                        index: 'user',
+                        title: '用户管理'
+                    },
                     {
                         icon: 'el-icon-lx-home',
                         index: 'dashboard',

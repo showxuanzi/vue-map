@@ -29,21 +29,21 @@ export default new Router({
                     component: resolve => require(['../components/page/Equipment.vue'], resolve),
                     meta: { title: '设备管理' }
                 },
-                // {
-                //     path: '/parameter',
-                //     component: resolve => require(['../components/page/Parameter.vue'], resolve),
-                //     meta: { title: '参数查询' }
-                // },
+                {
+                    path: '/parameter',
+                    component: resolve => require(['../components/page/Parameter.vue'], resolve),
+                    meta: { title: '参数查询' }
+                },
                 // {
                 //     path: '/data',
                 //     component: resolve => require(['../components/page/Data.vue'], resolve),
                 //     meta: { title: '数据分析' }
                 // },
-                //  {
-                //     path: '/user',
-                //     component: resolve => require(['../components/page/User.vue'], resolve),
-                //     meta: { title: '用户管理' }
-                // },
+                 {
+                    path: '/user',
+                    component: resolve => require(['../components/page/User.vue'], resolve),
+                    meta: { title: '用户管理' }
+                },
                 {
                     path: '/dashboard',
                     component: resolve => require(['../components/page/Dashboard.vue'], resolve),

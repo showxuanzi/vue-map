@@ -4,24 +4,24 @@
             <div class="ms-title">翰本空气质量监测平台</div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
-                    <el-input  placeholder="用户名">
+                    <el-input v-model="ruleForm.username" placeholder="username">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input type="password" placeholder="密码"  @keyup.enter.native="submitForm('ruleForm')">
+                    <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
                 </el-form-item>
-                 <el-form-item prop="username">
+                 <!-- <el-form-item prop="username">
                     <el-input placeholder="手机号">
                         <el-button slot="prepend" icon="el-icon-mobile-phone"></el-button>
                     </el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <div class="login-btn">
-                    <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
-                <!-- <p class="login-tips">Tips : 用户名和密码随便填。</p> -->
+                <p class="login-tips">Tips : 用户名和密码随便填。</p>
             </el-form>
         </div>
     </div>
