@@ -7,13 +7,18 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/dashboard'
+            redirect: '/BMap'
         },
         {
             path: '/',
             component: resolve => require(['../components/common/Home.vue'], resolve),
             meta: { title: '自述文件' },
             children:[
+                // {
+                //     path: '/registered',
+                //     component: resolve => require(['../components/page/Registered.vue'], resolve),
+                //     meta: { title: '注册' }
+                // },
                 {
                     path: '/BMap',
                     component: resolve => require(['../components/page/BMap.vue'], resolve),
@@ -120,6 +125,10 @@ export default new Router({
         {
             path: '/login',
             component: resolve => require(['../components/page/Login.vue'], resolve)
+        },
+        {
+            path: '/registered',
+            component: resolve => require(['../components/page/Registered.vue'], resolve)
         },
         {
             path: '*',

@@ -4,24 +4,24 @@
             <div class="ms-title">翰本空气质量监测平台</div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="username">
+                    <el-input placeholder="用户名" v-model="ruleForm.username">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
+                    <el-input type="password" placeholder="密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
                 </el-form-item>
-                 <!-- <el-form-item prop="username">
-                    <el-input placeholder="手机号">
+                 <el-form-item prop="phone">
+                    <el-input placeholder="手机号" v-model="ruleForm.phone">
                         <el-button slot="prepend" icon="el-icon-mobile-phone"></el-button>
                     </el-input>
-                </el-form-item> -->
+                </el-form-item>
                 <div class="login-btn">
-                    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
                 </div>
-                <p class="login-tips"><router-link to="/registered">没有账号，去注册</router-link></p>
+                <p class="login-tips"><router-link to="/login">已有账号，去登陆</router-link></p>
 
             </el-form>
         </div>
@@ -31,29 +31,58 @@
 <script>
     export default {
         data: function(){
+            var phoneReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+            var validaPhone = (rule, value, callback) =>{
+                if(value === ""){
+                    return callback(new Error("请输入手机号"));
+                };
+                setTimeout(() => {
+                    if (!phoneReg.test(value)) {
+                      callback(new Error('格式有误'))
+                    } else {
+                      callback()
+                    }
+                }, 1000);
+            };
             return {
                 ruleForm: {
-                    username: 'admin',
-                    password: '123123'
+                    username: '',
+                    password: '',
+                    phone: ''
                 },
                 rules: {
-                    username: [{ 
-                        required: true, //是否必填
-                        message: '请输入用户名', //规则
-                        trigger: 'blur' //触发事件
-                    }],
-                    password: [{ 
-                        required: true, 
-                        message: '请输入密码',
-                         trigger: 'blur' 
-                    }]
+                    username: [
+                        { required: true, message: '请输入用户名', trigger: 'blur' }
+                    ],
+                    password: [
+                        { required: true, message: '请输入密码', trigger: 'blur' }
+                    ],
+                    phone: [
+                        { required: true, validator: validaPhone, trigger: 'blur' }
+                    ]
                 }
             }
         },
         methods: {
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
-                    console.log(valid);
+                    if(valid){
+                        this.$axios.get("http://192.168.1.102:8080/user/regist.do", {
+                            params:{
+                                "username": this.ruleForm.username,
+                                "password": this.ruleForm.password,
+                                "phone": this.ruleForm.phone
+                            }
+                        }).then((res) => {
+                            console.log(res.data);
+                            if(res.data === 1){
+                                console.log("该用户名已存在，请重新输入");
+                            }else if(res.data === 2){
+                                console.log("注册成功");
+                            }
+                        });
+                    };
+                    // alert(valid);
                     // if (valid) {
                     //     localStorage.setItem('ms_username',this.ruleForm.username);
                     //     this.$router.push('/');

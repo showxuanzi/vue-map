@@ -13,6 +13,9 @@ Vue.prototype.$axios = axios;
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
+    // to: router即将进入的路由对象
+    // from: 当前导航即将离开的路由
+    // next: function(),进行管道中的一个钩子函数，如果执行完了，则导航的状态就是confirmed； 否则为false，终止导航
     const role = localStorage.getItem('ms_username');
     if(!role && to.path !== '/login'){
         next('/login');
