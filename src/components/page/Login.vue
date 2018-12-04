@@ -22,6 +22,7 @@
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
                 <p class="login-tips"><router-link to="/registered">没有账号，去注册</router-link></p>
+                <!-- <p class="login-tips" @click="test">没有账号，去注册</p> -->
 
             </el-form>
         </div>
@@ -54,14 +55,17 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     console.log(valid);
-                    // if (valid) {
-                    //     localStorage.setItem('ms_username',this.ruleForm.username);
-                    //     this.$router.push('/');
-                    // } else {
-                    //     console.log('error submit!!');
-                    //     return false;
-                    // }
+                    if (valid) {
+                        localStorage.setItem('ms_username',this.ruleForm.username);
+                        this.$router.push('/');
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
                 });
+            },
+            test(){
+                this.$router.push("/registered")
             }
         }
     }

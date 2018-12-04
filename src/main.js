@@ -17,7 +17,7 @@ router.beforeEach((to, from, next) => {
     // from: 当前导航即将离开的路由
     // next: function(),进行管道中的一个钩子函数，如果执行完了，则导航的状态就是confirmed； 否则为false，终止导航
     const role = localStorage.getItem('ms_username');
-    if(!role && to.path !== '/login'){
+    if((!role && to.path !== '/login') && (!role && to.path !== '/registered')){
         next('/login');
     }else if(to.meta.permission){
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已

@@ -4,6 +4,7 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 export default new Router({
+    mode:'history',
     routes: [
         {
             path: '/',
@@ -14,11 +15,6 @@ export default new Router({
             component: resolve => require(['../components/common/Home.vue'], resolve),
             meta: { title: '自述文件' },
             children:[
-                // {
-                //     path: '/registered',
-                //     component: resolve => require(['../components/page/Registered.vue'], resolve),
-                //     meta: { title: '注册' }
-                // },
                 {
                     path: '/BMap',
                     component: resolve => require(['../components/page/BMap.vue'], resolve),
