@@ -12,13 +12,14 @@
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
             </div>
             <el-table :data="data" border class="table" ref="multipleTable" @selection-change="handleSelectionChange">
+                <!-- <el-table-column type="selection" align="center" width="80"></el-table-column>
+                <el-table-column prop="id" label="设备编号" align="center"></el-table-column>
+                <el-table-column prop="num" label="监测数据点" width="180" align="center"></el-table-column>
+                <el-table-column prop="time" label="更新时间" width="200" align="center"></el-table-column> -->
                 <el-table-column type="selection" align="center" width="80"></el-table-column>
-                <el-table-column prop="id" label="设备编号" align="center">
-                </el-table-column>
-                <el-table-column prop="num" label="监测数据点" width="180" align="center">
-                </el-table-column>
-                <el-table-column prop="time" label="更新时间" width="200" align="center">
-                </el-table-column>
+                <el-table-column prop="devicename" label="设备编号" align="center"></el-table-column>
+                <el-table-column prop="address" label="设备位置" align="center"></el-table-column>
+                <el-table-column prop="position" label="经纬度" align="center"></el-table-column>
                 <el-table-column label="操作" align="center" width="180">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -27,7 +28,7 @@
                 </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000">
+                <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="totalNum">
                 </el-pagination>
             </div>
         </div>
@@ -38,7 +39,7 @@
                 <!-- <el-form-item label="日期">
                     <el-date-picker type="date" placeholder="选择日期" v-model="form.date" value-format="yyyy-MM-dd" style="width: 100%;"></el-date-picker>
                 </el-form-item> -->
-                <el-form-item label="企业名称" class="my-label">
+                <!-- <el-form-item label="企业名称" class="my-label">
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
                 <el-form-item label="企业地址">
@@ -49,6 +50,15 @@
                 </el-form-item>
                 <el-form-item label="联系方式">
                     <el-input v-model="form.phone"></el-input>
+                </el-form-item> -->
+                <el-form-item label="设备编号" class="my-label">
+                    <el-input v-model="form.devicename"></el-input>
+                </el-form-item>
+                <el-form-item label="设备位置">
+                    <el-input v-model="form.address"></el-input>
+                </el-form-item>
+                <el-form-item label="经纬度">
+                    <el-input v-model="form.position"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -84,38 +94,39 @@
                 editVisible: false,
                 delVisible: false,
                 form: {
-                    name: '',
+                    devicename: '',
                     address: '',
-                    num: '',
-                    phone: ''
+                    position: ''
                 },
                 idx: -1,
-                dialogTitle:"添加"
+                dialogTitle:"添加",
+                totalNum: 0
             }
         },
         created() {
-            this.getData();
+            this.getData(this.cur_page);
         },
         computed: {
             data() {
-                return this.tableData.filter((d) => {
-                    let is_del = false;
-                    for (let i = 0; i < this.del_list.length; i++) {
-                        if (d.id === this.del_list[i].id) {
-                            is_del = true;
-                            break;
-                        }
-                    }
-                    if (!is_del) {
-                        if (d.num.indexOf(this.select_cate) > -1 &&
-                            (d.id.indexOf(this.select_word) > -1 ||
-                                d.num.indexOf(this.select_word) > -1)
-                        ) {
-                            console.log(d);
-                            return d;
-                        }
-                    }
-                })
+                // return this.tableData.filter((d) => {
+                //     let is_del = false;
+                //     for (let i = 0; i < this.del_list.length; i++) {
+                //         if (d.id === this.del_list[i].id) {
+                //             is_del = true;
+                //             break;
+                //         }
+                //     }
+                //     if (!is_del) {
+                //         if (d.num.indexOf(this.select_cate) > -1 &&
+                //             (d.id.indexOf(this.select_word) > -1 ||
+                //                 d.num.indexOf(this.select_word) > -1)
+                //         ) {
+                //             console.log(d);
+                //             return d;
+                //         }
+                //     }
+                // })
+                return this.tableData
             }
         },
         methods: {
@@ -125,17 +136,25 @@
                 this.getData();
             },
             // 获取 easy-mock 的模拟数据
-            getData() {
+            getData(page) {
                 // 开发环境使用 easy-mock 数据，正式环境使用 json 文件
-                if (process.env.NODE_ENV === 'development') {
-                    this.url = 'https://www.easy-mock.com/mock/5bfe3a97009a932767a6367a/table/equipment';
-                    // this.url = '/ms/example/xmx';
-                };
-                this.$axios.post(this.url, {
-                    page: this.cur_page,
-                }).then((res) => {
-                    console.log(res.data);
-                    this.tableData = res.data.list;
+                // if (process.env.NODE_ENV === 'development') {
+                //     this.url = 'https://www.easy-mock.com/mock/5bfe3a97009a932767a6367a/table/equipment';
+                //     // this.url = '/ms/example/xmx';
+                // };
+                // this.$axios.post(this.url, {
+                //     page: this.cur_page,
+                // }).then((res) => {
+                //     this.tableData = res.data.list;
+                // });
+                this.$axios.get("http://192.168.1.102:8080/device/deviceList.do?",{
+                    params:{
+                        page: page,
+                        limit: 10
+                    }
+                }).then((res)=>{
+                    this.tableData = res.data.data;
+                    this.totalNum = res.data.count;
                 })
             },
             search() {
@@ -178,9 +197,18 @@
             },
             // 保存编辑
             saveEdit() {
-                this.$set(this.tableData, this.idx, this.form);
                 this.editVisible = false;
-                this.$message.success(`修改第 ${this.idx+1} 行成功`);
+                // this.$set(this.tableData, this.idx, this.form);
+                // this.$message.success(`修改第 ${this.idx+1} 行成功`);
+                this.$axios.get("http://192.168.1.102:8080/device/adddevice.do?",{
+                    params:{
+                        devicename: this.form.devicename,
+                        position: this.form.position,
+                        address: this.form.address
+                    }
+                }).then((res)=>{
+                    console.log(res)
+                })
             },
             // 确定删除
             deleteRow(){
@@ -192,6 +220,7 @@
             add(){
                 this.editVisible = true;
                 this.dialogTitle = "添加";
+
             }
         }
     }

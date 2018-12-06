@@ -13,8 +13,8 @@
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
                 </el-form-item>
-                 <el-form-item prop="phone">
-                    <el-input placeholder="手机号" v-model="ruleForm.phone">
+                 <el-form-item prop="mobile">
+                    <el-input placeholder="手机号" v-model="ruleForm.mobile">
                         <el-button slot="prepend" icon="el-icon-mobile-phone"></el-button>
                     </el-input>
                 </el-form-item>
@@ -59,7 +59,7 @@
                 ruleForm: {
                     username: '',
                     password: '',
-                    phone: ''
+                    mobile: ''
                 },
                 rules: {
                     username: [
@@ -68,7 +68,7 @@
                     password: [
                         { required: true, message: '请输入密码', trigger: 'blur' }
                     ],
-                    phone: [
+                    mobile: [
                         { required: true, validator: validaPhone, trigger: 'blur' }
                     ]
                 },
@@ -86,7 +86,7 @@
                             params:{
                                 "username": this.ruleForm.username,
                                 "password": this.ruleForm.password,
-                                "phone": this.ruleForm.phone
+                                "mobile": this.ruleForm.mobile
                             }
                         }).then((res) => {
                             if(res.data === 1){

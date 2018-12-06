@@ -20,7 +20,7 @@
                 </el-form-item> -->
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-                    
+
                 </div>
                 <p class="login-tips"><router-link to="/registered">没有账号，去注册</router-link></p>
                 <!-- <p class="login-tips" @click="test">没有账号，去注册</p> -->
@@ -62,11 +62,13 @@
                                 "password": this.ruleForm.password
                             }
                         }).then((res) => {
-                            console.log(res.data);
-                            if(res.data === 1){
+                            console.log(res);
+                            if(res.data !== 2){
+                                console.log(res.data);
                                 localStorage.setItem('ms_username',this.ruleForm.username);
-                                this.$router.push('/');
-                            }else if(res.data === 2){
+                                localStorage.setItem('ms_userid',res.data.id);
+                                // this.$router.push('/');
+                            }else{
                                 this.$refs[formName].resetFields();
                                 this.$message.error('用户名或密码错误，请重新输入');
                             }

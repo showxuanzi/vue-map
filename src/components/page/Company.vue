@@ -29,7 +29,7 @@
                 </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000">
+                <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="100">
                 </el-pagination>
             </div>
         </div>
@@ -122,6 +122,7 @@
         methods: {
             // 分页导航
             handleCurrentChange(val) {
+                console.log(val)
                 this.cur_page = val;
                 this.getData();
             },
@@ -197,6 +198,17 @@
             add(){
                 this.editVisible = true;
                 this.dialogTitle = "添加";
+            },
+            test(){
+                console.log("sss")
+                this.$axios.get("http://192.168.1.102:8080/user/userList.do?", {
+                    params:{
+                        page: 1,
+                        limit: 10
+                    }
+                }).then((res) => {
+                    console.log(res)
+                })
             }
         }
     }
