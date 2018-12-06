@@ -22,9 +22,20 @@
                     <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
                 </div>
                 <p class="login-tips"><router-link to="/login">已有账号，去登陆</router-link></p>
-
             </el-form>
         </div>
+        <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
+        <el-dialog
+          :visible.sync="dialogVisible"
+          width="20%" >
+          <p><i class="el-icon-loading"></i><span>注册成功，正在跳转，请稍等</span></p>
+          <p><span>若没有跳转，请</span><router-link to="/login">点我登陆</router-link></p>
+          <!-- <span slot="footer" class="dialog-footer"> -->
+            <!-- <el-button @click="dialogVisible = false">取 消</el-button> -->
+            <!-- <el-button type="primary" @click="dialogVisible = false">确 定</el-button> -->
+            <!-- <el-button type="primary" @click="login">确 定</el-button> -->
+          <!-- </span> -->
+        </el-dialog>
     </div>
 </template>
 
@@ -60,12 +71,16 @@
                     phone: [
                         { required: true, validator: validaPhone, trigger: 'blur' }
                     ]
-                }
+                },
+                dialogVisible: false,
+                formName: ""
             }
         },
         methods: {
             submitForm(formName) {
+                
                 this.$refs[formName].validate((valid) => {
+                    var _this = this;
                     if(valid){
                         this.$axios.get("http://192.168.1.102:8080/user/regist.do", {
                             params:{
@@ -74,23 +89,24 @@
                                 "phone": this.ruleForm.phone
                             }
                         }).then((res) => {
-                            console.log(res.data);
                             if(res.data === 1){
-                                console.log("该用户名已存在，请重新输入");
+                                this.$refs[formName].resetFields();
+                                this.$message.error('该用户名已存在，请重新输入');
                             }else if(res.data === 2){
-                                console.log("注册成功");
+                                this.$refs[formName].resetFields();
+                                this.dialogVisible = true;
+                                setTimeout(function(){
+                                    this.dialogVisible = false;
+                                    _this.$router.push({path: '/login'}); 
+                                },2000)
                             }
                         });
                     };
-                    // alert(valid);
-                    // if (valid) {
-                    //     localStorage.setItem('ms_username',this.ruleForm.username);
-                    //     this.$router.push('/');
-                    // } else {
-                    //     console.log('error submit!!');
-                    //     return false;
-                    // }
                 });
+            },
+            login(){
+                this.dialogVisible = false;
+                this.$router.push("/login");
             }
         }
     }
@@ -141,6 +157,21 @@
     }
     .login-tips a{
         color:#fff;
+        text-decoration: underline;
+    }
+    .el-dialog__body>p{
+        line-height: 30px;
+        text-align: center;
+    }
+    .el-dialog__body>p>span{
+        margin-left: 20px;
+    }
+    .el-dialog__body>p>.el-icon-loading{
+        font-size: 20px;
+        color: #409EFF;
+    }
+    .el-dialog__body>p>a{
+        color:#409EFF;
         text-decoration: underline;
     }
 </style>
