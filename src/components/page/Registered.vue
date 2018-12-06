@@ -80,6 +80,7 @@
             submitForm(formName) {
                 
                 this.$refs[formName].validate((valid) => {
+                    var _this = this;
                     if(valid){
                         this.$axios.get("http://192.168.1.102:8080/user/regist.do", {
                             params:{
@@ -88,29 +89,19 @@
                                 "phone": this.ruleForm.phone
                             }
                         }).then((res) => {
-                            console.log(res.data);
                             if(res.data === 1){
                                 this.$refs[formName].resetFields();
                                 this.$message.error('该用户名已存在，请重新输入');
                             }else if(res.data === 2){
                                 this.$refs[formName].resetFields();
                                 this.dialogVisible = true;
-                                // this.$message({
-                                //   message: '注册成功，去登陆',
-                                //   type: 'success'
-                                // });
-                                // this.$router.push('login');
+                                setTimeout(function(){
+                                    this.dialogVisible = false;
+                                    _this.$router.push({path: '/login'}); 
+                                },2000)
                             }
                         });
                     };
-                    // alert(valid);
-                    // if (valid) {
-                    //     localStorage.setItem('ms_username',this.ruleForm.username);
-                    //     this.$router.push('/');
-                    // } else {
-                    //     console.log('error submit!!');
-                    //     return false;
-                    // }
                 });
             },
             login(){

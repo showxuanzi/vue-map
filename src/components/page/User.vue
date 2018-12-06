@@ -19,11 +19,11 @@
                 </el-table-column>
                 <el-table-column prop="time" label="创建时间" align="center">
                 </el-table-column>
-                <el-table-column label="权限" width="150" align="center">
+                <!-- <el-table-column label="权限" width="150" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-setting" @click="handleEdit(scope.$index, scope.row)">权限</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column label="操作" align="center" width="180">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>

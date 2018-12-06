@@ -4,12 +4,12 @@
             <div class="ms-title">翰本空气质量监测平台</div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="username">
+                    <el-input v-model="ruleForm.username" placeholder="用户名">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
+                    <el-input type="password" placeholder="密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
                 </el-form-item>
@@ -34,8 +34,8 @@
         data: function(){
             return {
                 ruleForm: {
-                    username: 'admin',
-                    password: '123123'
+                    username: '',
+                    password: ''
                 },
                 rules: {
                     username: [{ 
@@ -54,10 +54,23 @@
         methods: {
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
-                    console.log(valid);
                     if (valid) {
-                        localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/');
+                        this.$axios.get("http://192.168.1.102:8080/user/login.do", {
+                            params:{
+                                "username": this.ruleForm.username,
+                                "password": this.ruleForm.password
+                            }
+                        }).then((res) => {
+                            console.log(res.data);
+                            if(res.data === 1){
+                                localStorage.setItem('ms_username',this.ruleForm.username);
+                                this.$router.push('/');
+                            }else if(res.data === 2){
+                                this.$refs[formName].resetFields();
+                                this.$message.error('用户名或密码错误，请重新输入');
+                            }
+                        });
+                        
                     } else {
                         console.log('error submit!!');
                         return false;
