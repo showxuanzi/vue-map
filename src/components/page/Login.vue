@@ -20,13 +20,10 @@
                 </el-form-item> -->
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                    
                 </div>
                 <p class="login-tips"><router-link to="/registered">没有账号，去注册</router-link></p>
-<<<<<<< HEAD
-                <!-- <p class="login-tips"><router-link to="http://baidu.com">没有账号，去注册</router-link></p> -->
-=======
                 <!-- <p class="login-tips" @click="test">没有账号，去注册</p> -->
->>>>>>> c5a33e9d34880faff74237d1d633cd721bb4a08b
 
             </el-form>
         </div>
@@ -58,12 +55,6 @@
         methods: {
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
-<<<<<<< HEAD
-                    console.log(valid);
-                    if (valid) {
-                        localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/');
-=======
                     if (valid) {
                         this.$axios.get("http://192.168.1.102:8080/user/login.do", {
                             params:{
@@ -81,7 +72,6 @@
                             }
                         });
                         
->>>>>>> c5a33e9d34880faff74237d1d633cd721bb4a08b
                     } else {
                         console.log('error submit!!');
                         return false;
