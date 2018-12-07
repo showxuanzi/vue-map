@@ -30,7 +30,7 @@
     </div>
 </template>
 
-<script>
+<script> 
     export default {
         data: function(){
             return {
@@ -62,12 +62,11 @@
                                 "password": this.ruleForm.password
                             }
                         }).then((res) => {
-                            console.log(res);
                             if(res.data !== 2){
-                                console.log(res.data);
-                                localStorage.setItem('ms_username',this.ruleForm.username);
-                                localStorage.setItem('ms_userid',res.data.id);
-                                // this.$router.push('/');
+                                this.$router.push('/');
+                                sessionStorage.setItem('hb_username',this.ruleForm.username);
+                                sessionStorage.setItem('hb_userid',res.data.id);
+                                
                             }else{
                                 this.$refs[formName].resetFields();
                                 this.$message.error('用户名或密码错误，请重新输入');

@@ -35,7 +35,7 @@
 
         <!-- 编辑弹出框 -->
         <el-dialog :title="dialogTitle" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="50px">
+            <el-form ref="form" :model="form" :rules="rules" label-width="50px">
                 <!-- <el-form-item label="日期">
                     <el-date-picker type="date" placeholder="选择日期" v-model="form.date" value-format="yyyy-MM-dd" style="width: 100%;"></el-date-picker>
                 </el-form-item> -->
@@ -51,19 +51,19 @@
                 <el-form-item label="联系方式">
                     <el-input v-model="form.phone"></el-input>
                 </el-form-item> -->
-                <el-form-item label="设备编号" class="my-label">
+                <el-form-item prop="devicename" label="设备编号" class="my-label marginL100">
                     <el-input v-model="form.devicename"></el-input>
                 </el-form-item>
-                <el-form-item label="设备位置">
+                <el-form-item prop="address" label="设备位置" class="my-label marginL100">
                     <el-input v-model="form.address"></el-input>
                 </el-form-item>
-                <el-form-item label="经纬度">
+                <el-form-item prop="position" label="经纬度" class="my-label marginL100">
                     <el-input v-model="form.position"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
+                <el-button type="primary" @click="saveEdit('form')">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -98,13 +98,33 @@
                     address: '',
                     position: ''
                 },
-                idx: -1,
-                dialogTitle:"添加",
-                totalNum: 0
+                rules: {
+                    devicename: [{ 
+                        required: true, //是否必填
+                        message: '设备编号不能为空', //规则
+                        trigger: 'blur' //触发事件
+                    }],
+                    address: [{ 
+                        required: true, 
+                        message: '设备位置不能为空',
+                         trigger: 'blur' 
+                    }],
+                    position: [{ 
+                        required: true, 
+                        message: '经纬度不能为空',
+                         trigger: 'blur' 
+                    }],
+                },
+                idx: -1,// 删除操作时的id
+                dialogTitle:"添加", // 添加 or 编辑
+                totalNum: 0, //表单总条数
+                userId: 0, // 用户id
+                listItemId: null // 编辑时所选项的id
             }
         },
         created() {
             this.getData(this.cur_page);
+            this.userId = sessionStorage.getItem('hb_userid');
         },
         computed: {
             data() {
@@ -133,20 +153,9 @@
             // 分页导航
             handleCurrentChange(val) {
                 this.cur_page = val;
-                this.getData();
+                this.getData(this.cur_page);
             },
-            // 获取 easy-mock 的模拟数据
             getData(page) {
-                // 开发环境使用 easy-mock 数据，正式环境使用 json 文件
-                // if (process.env.NODE_ENV === 'development') {
-                //     this.url = 'https://www.easy-mock.com/mock/5bfe3a97009a932767a6367a/table/equipment';
-                //     // this.url = '/ms/example/xmx';
-                // };
-                // this.$axios.post(this.url, {
-                //     page: this.cur_page,
-                // }).then((res) => {
-                //     this.tableData = res.data.list;
-                // });
                 this.$axios.get("http://192.168.1.102:8080/device/deviceList.do?",{
                     params:{
                         page: page,
@@ -167,19 +176,18 @@
                 return row.tag === value;
             },
             handleEdit(index, row) {
-                this.idx = index;
+                this.listItemId = row.id;
                 const item = this.tableData[index];
                 this.form = {
-                    name: item.name,
+                    devicename: item.devicename,
                     address: item.address,
-                    num: item.num,
-                    phone: item.phone
+                    position: item.position
                 }
                 this.editVisible = true;
                 this.dialogTitle = "编辑";
             },
             handleDelete(index, row) {
-                this.idx = index;
+                this.idx = row.id;
                 this.delVisible = true;
             },
             delAll() {
@@ -195,42 +203,85 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-            // 保存编辑
-            saveEdit() {
-                this.editVisible = false;
-                // this.$set(this.tableData, this.idx, this.form);
-                // this.$message.success(`修改第 ${this.idx+1} 行成功`);
-                this.$axios.get("http://192.168.1.102:8080/device/adddevice.do?",{
-                    params:{
-                        devicename: this.form.devicename,
-                        position: this.form.position,
-                        address: this.form.address
+            // 添加 or 编辑 保存 添加的时候listItemId为null，每次编辑完成之后把listItemId置为null
+            saveEdit(formName) {
+                this.$refs[formName].validate((valid) =>{
+                    if(valid){
+                        this.editVisible = false;
+                        this.$axios.get("http://192.168.1.102:8080/device/adddevice.do?",{
+                            params:{
+                                devicename: this.form.devicename,
+                                position: this.form.position,
+                                address: this.form.address,
+                                userId: this.userId,
+                                id: this.listItemId
+                            }
+                        }).then((res)=>{
+                            // 添加 & 编辑
+                            if(this.listItemId === null){
+                                if(res.data === 1){
+                                    this.$message.success('添加成功');
+                                    this.getData(this.cur_page);
+                                }else if(res.data === 2){
+                                    this.$message.error('添加失败，请重试');
+                                }else{
+                                    this.$message.error('系统错误，请稍后');
+                                }
+                            }else{
+                                if(res.data === 1){
+                                    this.$message.success('修改成功');
+                                    this.getData(this.cur_page);
+                                }else if(res.data === 2){
+                                    this.$message.error('修改失败，请重试');
+                                }else{
+                                    this.$message.error('系统错误，请稍后');
+                                }
+                                this.listItemId = null;
+                            }
+                        })
+                    }else{
+                        return false;
                     }
-                }).then((res)=>{
-                    console.log(res)
                 })
+                
             },
             // 确定删除
             deleteRow(){
-                this.tableData.splice(this.idx, 1);
-                this.$message.success('删除成功');
-                this.delVisible = false;
+                this.$axios.get("http://192.168.1.102:8080/device/deletedevice.do?",{
+                    params:{
+                        id: this.idx
+                    }
+                }).then((res)=>{
+                    if(res.data === 1){
+                        this.$message.success('删除成功');
+                        this.getData(this.cur_page);
+                    }else if(res.data === 2){
+                        this.$message.error('删除失败，请重试');
+                    }else{
+                        this.$message.error('系统错误，请稍后');
+                    }
+                    this.delVisible = false;
+                })
             },
             // 添加
             add(){
                 this.editVisible = true;
                 this.dialogTitle = "添加";
-
+                // this.$nextTick(() => {
+                //   this.$refs['form'].resetFields();
+                // });
+                console.log(this.form);
+                // this.form = {};
             }
         }
     }
 
 </script>
 <style type="text/css">
-    .el-form-item__label{
+    .marginL100 .el-form-item__label{
         width: 100px!important;
     }
-    .el-form-item__content{
+    .marginL100 .el-form-item__content{
         margin-left: 100px!important;
     }
 </style>

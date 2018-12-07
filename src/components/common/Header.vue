@@ -51,13 +51,13 @@
             return {
                 collapse: false,
                 fullscreen: false,
-                name: 'linxin',
+                name: 'hanben',
                 message: 2
             }
         },
         computed:{
             username(){
-                let username = localStorage.getItem('ms_username');
+                let username = sessionStorage.getItem('hb_username');
                 return username ? username : this.name;
             }
         },
@@ -65,7 +65,8 @@
             // 用户名下拉菜单选择事件
             handleCommand(command) {
                 if(command == 'loginout'){
-                    localStorage.removeItem('ms_username')
+                    sessionStorage.removeItem('hb_username');
+                    sessionStorage.removeItem('hb_userid');
                     this.$router.push('/login');
                 }
             },
