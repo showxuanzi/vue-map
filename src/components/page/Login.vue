@@ -63,10 +63,9 @@
                             }
                         }).then((res) => {
                             if(res.data !== 2){
-                                this.$router.push('/');
                                 sessionStorage.setItem('hb_username',this.ruleForm.username);
                                 sessionStorage.setItem('hb_userid',res.data.id);
-                                
+                                this.$router.push({path:'/'}); 
                             }else{
                                 this.$refs[formName].resetFields();
                                 this.$message.error('用户名或密码错误，请重新输入');
@@ -74,10 +73,10 @@
                         });
                         
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
+                console.log("234")
             },
             test(){
                 this.$router.push("/registered")

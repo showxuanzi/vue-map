@@ -4,25 +4,25 @@
         <div id="allmap" style="width: 100%; height:1000px; border: 1px solid gray;overflow:hidden;"></div>
         <div id="box" v-show="isShow">
             <div class="box">
-                <h3 class="box-title"> data_info[i][4]  </h3>
+                <h3 class="box-title">{{pointDetail.devicename}}</h3>
                 <div class="clear">
                     <div class="box-img">
                         <img src=" data_info[i][3] ">
                     </div>
                     <div class="box-para">
                         <ul>
-                            <li><span>温度：</span><strong> data_info[i][5]  </strong></li>
-                            <li><span>湿度：</span><strong> data_info[i][6]  </strong></li>
-                            <li><span>PM2.5：</span><strong> data_info[i][7]  </strong></li>
-                            <li><span>PM10：</span><strong> data_info[i][8]  </strong></li>
-                            <li><span>SO2：</span><strong> data_info[i][9]  </strong></li>
-                            <li><span>NO2：</span><strong> data_info[i][10]  </strong></li>
-                            <li><span>CO：</span><strong> data_info[i][11]  </strong></li>
-                            <li><span>O3：</span><strong> data_info[i][12]  </strong></li>
+                            <li><span>温度：</span><strong> {{pointDetail.temperature}}  </strong></li>
+                            <li><span>湿度：</span><strong> {{pointDetail.shidu}}  </strong></li>
+                            <li><span>PM2.5：</span><strong> {{pointDetail.pm25}}  </strong></li>
+                            <li><span>PM10：</span><strong> {{pointDetail.pm10}}  </strong></li>
+                            <li><span>SO2：</span><strong> {{pointDetail.so2}} </strong></li>
+                            <li><span>NO2：</span><strong> {{pointDetail.no2}}  </strong></li>
+                            <li><span>CO：</span><strong> {{pointDetail.co}}  </strong></li>
+                            <li><span>O3：</span><strong> {{pointDetail.o3}}  </strong></li>
                         </ul>
                     </div>
                 </div>
-                <div class="box-address"> data_info[i][2] </div>
+                <div class="box-address"> {{pointDetail.address}} </div>
             </div>
         </div>
     </div>
@@ -31,91 +31,82 @@
 import BMap from 'BMap'
 export default {
     data: () => ({
-        isShow: false,
-        dataList: []
+        isShow: false, 
+        dataList: [],
+        pointDetail: {}
     }),
-    created () {
-        this.getData();
-    },
     mounted () {
-        // 百度地图API功能  
-        // var map = new BMap.Map("allmap");
-        // map.centerAndZoom(new BMap.Point(117.162605,39.166283), 15);
-        // map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
-        // map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
-  // var data_info = [
-  //          [117.162605,39.166283,"地址：天津市红桥区湘潭道1号","image/qigong.jpg","启工科技创新中心","20℃","20%","32","39","54","28","0.6","54"],
-  //          [117.16998,39.164265,"地址：天津市红桥区西站前街1号 ","image/qigong.jpg","天津西站","wd-2","sd-2","pm2.5-2","pm10-2","o2-2","no2-2","co-2","o3-2"],
-  //          [117.216853,39.142488,"地址：天津市河北区新纬路1号 ","image/qigong.jpg","地点3","wd-3","sd-3","pm2.5-3","pm10-3","o2-3","no2-3","co-3","o3-3"]
-  //         ];
-  // var opts = {
-  //       width : 600,     // 信息窗口宽度
-  //       height: 300,     // 信息窗口高度
-  //       // title : "信息窗口" , // 信息窗口标题
-  //       enableMessage:true//设置允许信息窗发送短息
-  //        };
-  // for(var i=0;i<data_info.length;i++){
-  //   var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
-  //       var content = '<div id="box">'
-  //                   +'<div class="box">'
-  //                   +'<h3 class="box-title">'+ data_info[i][4]  +'</h3>'
-  //                   +'<div class="clear">'
-  //                   +'<div class="box-img">'
-  //                   +'<img src="'+ data_info[i][3] +'">'
-  //                   +'</div>'
-  //                   +'<div class="box-para">'
-  //                   +'<ul>'
-  //                   +'<li><span>温度：</span><strong>'+ data_info[i][5]  +'</strong></li>'
-  //                   +'<li><span>湿度：</span><strong>'+ data_info[i][6]  +'</strong></li>'
-  //                   +'<li><span>PM2.5：</span><strong>'+ data_info[i][7]  +'</strong></li>'
-  //                   +'<li><span>PM10：</span><strong>'+ data_info[i][8]  +'</strong></li>'
-  //                   +'<li><span>SO2：</span><strong>'+ data_info[i][9]  +'</strong></li>'
-  //                   +'<li><span>NO2：</span><strong>'+ data_info[i][10]  +'</strong></li>'
-  //                   +'<li><span>CO：</span><strong>'+ data_info[i][11]  +'</strong></li>'
-  //                   +'<li><span>O3：</span><strong>'+ data_info[i][12]  +'</strong></li>'
-  //                   +'</ul>'
-  //                   +'</div>'
-  //                   +'</div>'
-  //                   +'<div class="box-address">'+ data_info[i][2] +'</div>'
-  //                   +'</div>'
-  //                   +'</div>';
-  //   map.addOverlay(marker);               // 将标注添加到地图中
-  //   // addClickHandler(content,marker);
-  // }
-  function addClickHandler(content,marker){
-    marker.addEventListener("click",function(e){
-      openInfo(content,e)}
-    );
-  }
-  function openInfo(content,e){
-    var p = e.target;
-    var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
-    var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
-    map.openInfoWindow(infoWindow,point); //开启信息窗口
-  }
+        this.map();
   },
   methods: {
-    getData(){
-        console.log(BMap);
-        var map = new BMap.Map("allmap");
+    map(){
+    let map = new BMap.Map("allmap"); // 创建Map实例
+        map.centerAndZoom(new BMap.Point(117.162605,39.166283), 15);// 初始化地图,设置中心点坐标和地图级别
+        map.addControl(new BMap.MapTypeControl({//添加地图类型控件
+            mapTypes:[
+                BMAP_NORMAL_MAP,
+                BMAP_HYBRID_MAP
+            ]}));
+        map.setCurrentCity("天津");// 设置地图显示的城市 此项是必须设置的
+        map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
         this.$axios.get("http://192.168.1.102:8080/device/alldevice.do")
         .then((res)=>{
-            console.log(res.data);
-            this.dataList = res.data;
-            for(var i = 0; i < this.dataList.length; i++){
-                var lon = this.dataList[i].position.split(",")[0];
-                var lat = this.dataList[i].position.split(",")[1];
-                console.log(lon);
-                console.log(lat);
+            for(let i = 0; i < res.data.length; i++){
+                var lon = res.data[i].position.split(",")[0];
+                var lat = res.data[i].position.split(",")[1];
+                var id = res.data[i].id;
+                this.dataList.push({
+                    id: id,
+                    lon: lon,
+                    lat: lat
+                })
+            }
+            console.log(this.dataList)
+            for (let i = 0; i < this.dataList.length;i++) {
+                var points = new BMap.Point(this.dataList[i].lon,this.dataList[i].lat);//创建坐标点
+                markerFun(points,this.dataList[i].id);
+            }
+        });
+        let _this = this;
+        function markerFun (points,id) {
+            var markers = new BMap.Marker(points);
+            map.addOverlay(markers);
+            markers.customData = {markerId: id};
+            
+            markers.addEventListener("click", function (e) { 
+                console.log(this);
+                console.log(e.target.customData.markerId);
+                // _this.mapDetail(e.target.customData.markerId);
+                _this.$axios.get("http://192.168.1.102:8080/device/environmentDetail.do?",{
+                    params:{deviceId: e.target.customData.markerId}
+                }).then((res)=>{
+                    console.log(res.data)
+                    _this.pointDetail = res.data;
+                    // this.isShow = true;
+                    console.log(_this.pointDetail );
+                    _this.$nextTick(() => {
+                        var content = document.getElementById("box").innerHTML;
+                        console.log(content);
+                        console.log(this)
+                        var infoWindow = new BMap.InfoWindow(content);
+                        this.openInfoWindow(infoWindow); 
+                    })
+                    
+                })
                 
-                var marker = new BMap.Marker(new BMap.Point(lon,lat));  // 创建标注
-                map.addOverlay(marker);               // 将标注添加到地图中
-                // addClickHandler(content,marker);
-          }
-        })
-    }
-    
-  }
+            });
+        }
+    },
+    // mapDetail(id){
+    //     this.$axios.get("http://192.168.1.102:8080/device/environmentDetail.do?",{
+    //         params:{deviceId: id}
+    //     }).then((res)=>{
+    //         console.log(res.data)
+    //         this.pointDetail = res.data;
+    //         // this.isShow = true;
+    //     })
+    // }
+  },
 }
 </script>
 <style>

@@ -161,7 +161,7 @@
                         page: page,
                         limit: 10
                     }
-                }).then((res)=>{
+                }).then((res) => {
                     this.tableData = res.data.data;
                     this.totalNum = res.data.count;
                 })
